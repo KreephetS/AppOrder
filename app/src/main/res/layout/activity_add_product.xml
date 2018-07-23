@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:numberpicker="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    tools:context=".shop.view.activity.AddProductActivity">
+
+    <EditText
+        android:id="@+id/etNameProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:hint="Name Product" />
+
+    <com.travijuu.numberpicker.library.NumberPicker
+        android:id="@+id/numProductInBasket"
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/etNameProduct"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        numberpicker:focusable="false"
+        numberpicker:max="10"
+        numberpicker:min="0"
+        numberpicker:unit="1"
+        numberpicker:value="-5" />
+
+    <EditText
+        android:id="@+id/etCondition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/numProductInBasket"
+        android:lines="10"
+        android:padding="10dp"
+        android:background="@drawable/edit_text_design"
+        android:minLines="5"
+        android:gravity="top|left"
+        android:maxLines="5"
+        android:hint="Condition" />
+
+    <Button
+        android:id="@+id/btnSaveUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:text="save" />
+</RelativeLayout>
