@@ -3,41 +3,82 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView_product"
-        android:layout_width="match_parent"
-        android:paddingBottom="50dp"
-        android:layout_height="wrap_content">
-
-    </android.support.v7.widget.RecyclerView>
-
     <LinearLayout
+        android:id="@+id/promotionContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="100"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+
+        android:orientation="vertical"
+        android:weightSum="100">
 
         <View
-            android:id="@+id/line1"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#A9A9A9" />
 
-        <Button
-            android:id="@+id/btnAddProduct"
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_gravity="end"
-            android:textColor="#fff"
-            android:layout_margin="5dp"
-            android:background="@drawable/round_add_btn"
-            android:text="add Product" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="สินค้าโปรโมชั่น" />
 
         <View
-            android:id="@+id/line2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#A9A9A9" />
     </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/promotionContainer"
+        android:paddingBottom="50dp">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/addProductContainer"
+
+        android:background="#A9A9A9" />
+
+    <LinearLayout
+        android:id="@+id/addProductContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"
+            android:layout_weight="50"
+            android:text="เพิ่มสินค้าด้วยตนเอง" />
+
+        <Button
+            android:id="@+id/btnAddProduct"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="50"
+            android:background="@drawable/round_add_btn"
+            android:text="add Product"
+            android:textColor="#fff" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/addProductContainer"
+        android:layout_marginTop="5dp"
+        android:background="#A9A9A9" />
 </RelativeLayout>
