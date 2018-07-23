@@ -8,13 +8,10 @@ import android.support.v7.app.AppCompatActivity
 import com.example.patchanan.apporder.shop.view.fragment.ShopFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import android.os.Handler
-import android.util.Log
-import com.example.patchanan.apporder.basket.adapter.BasketAdapter
 import com.example.patchanan.apporder.basket.view.fragment.BasketFragment
 import com.example.patchanan.apporder.basket.view.viewHoldel.BasketViewHoldel
 import com.example.patchanan.apporder.common.viewmodel.CommonFunction
 import com.example.patchanan.apporder.database.DBHelper
-import com.example.patchanan.apporder.manager.HttpManager
 import com.example.patchanan.apporder.shop.view.viewholder.ShopViewHolder
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

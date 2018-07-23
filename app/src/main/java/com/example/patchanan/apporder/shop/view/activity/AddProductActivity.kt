@@ -9,6 +9,8 @@ import com.example.patchanan.apporder.R
 import com.example.patchanan.apporder.shop.viewModel.ShopViewModel
 import com.example.patchanan.apporder.common.model.ProductModel
 import kotlinx.android.synthetic.main.activity_add_product.*
+import com.example.patchanan.apporder.common.viewmodel.CommonFunction
+
 
 class AddProductActivity : AppCompatActivity() {
 
@@ -33,6 +35,9 @@ class AddProductActivity : AppCompatActivity() {
                     ViewModelProviders.of(this).get(ShopViewModel::class.java).updateProduct(this, product)
                     finish()
                 } else {
+                    CommonFunction.msgDialog(this, "กรอกข้อมูลไม่ครบ", "กรุณากรอกข้อมูลให้ครบถ้วน", false,
+                            "OK", "No"
+                    ) { }
                     Log.wtf("check null", "ทำไมใส่วะ")
                 }
             }
@@ -46,6 +51,9 @@ class AddProductActivity : AppCompatActivity() {
                     setResult(Activity.RESULT_OK, intent)
                     finish()
                 } else {
+                    CommonFunction.msgDialog(this, "กรอกข้อมูลไม่ครบ", "กรุณากรอกข้อมูลให้ครบถ้วน", false,
+                            "OK", "No"
+                    ) { }
                     Log.wtf("check null", "ทำไมใส่วะ")
                 }
             }

@@ -24,6 +24,8 @@ import io.reactivex.schedulers.Schedulers
 
 class ShopFragment : Fragment() {
 
+    private var product: MutableList<ProductModel> = mutableListOf()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_home_user, container, false)
     }
@@ -31,7 +33,6 @@ class ShopFragment : Fragment() {
     private val mContext: Context by lazy {
         activity?.applicationContext!!
     }
-
     private val shopViewModel by lazy {
         ViewModelProviders.of(this).get(ShopViewModel::class.java)
     }

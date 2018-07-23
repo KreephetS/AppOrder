@@ -39,6 +39,7 @@
         android:padding="10dp"
         android:background="@drawable/edit_text_design"
         android:minLines="5"
+        android:imeOptions="actionDone"
         android:gravity="top|left"
         android:maxLines="5"
         android:hint="Condition" />

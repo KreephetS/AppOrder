@@ -6,9 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AlertDialog
 import android.util.Log
-import com.example.patchanan.apporder.R
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.example.patchanan.apporder.basket.view.fragment.BasketFragment
 
 object CommonFunction {
     fun replaceFragment(fragmentManager: FragmentManager, fragment: Fragment, containerId: Int, tag: String) {
