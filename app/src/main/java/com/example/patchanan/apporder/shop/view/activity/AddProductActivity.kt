@@ -11,53 +11,65 @@ import com.example.patchanan.apporder.common.model.ProductModel
 import kotlinx.android.synthetic.main.activity_add_product.*
 import com.example.patchanan.apporder.common.viewmodel.CommonFunction
 
-
 class AddProductActivity : AppCompatActivity() {
-
+    private var product = ProductModel()
+    private lateinit var shopViewModel: ShopViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_product)
-
-        var product = ProductModel()
-
+        shopViewModel = ViewModelProviders.of(this).get(ShopViewModel::class.java)
         if (intent.hasExtra("itemProduct")) {
             product = intent.getParcelableExtra("itemProduct")
+            updateProduct(product)
+        } else {
+            addProduct(product)
+        }
+    }
 
+    private fun updateProduct(product: ProductModel?) {
+        product?.let { product ->
             etNameProduct.setText(product.nameProduct)
-            numProductInBasket.value = product.numProduct!!
+            numProductInBasket.value = product.numProduct
             etCondition.setText(product.condition)
-
             btnSaveUpdate.setOnClickListener {
                 if (etNameProduct.text.toString() != "" && numProductInBasket.value != 0) {
-                    product.nameProduct = etNameProduct.text.toString()
-                    product.numProduct = numProductInBasket.value
-                    product.condition = etCondition.text.toString()
-                    ViewModelProviders.of(this).get(ShopViewModel::class.java).updateProduct(this, product)
+                    setProduct(product)
+                    shopViewModel.updateProduct(this, product)
                     finish()
                 } else {
-                    CommonFunction.msgDialog(this, "กรอกข้อมูลไม่ครบ", "กรุณากรอกข้อมูลให้ครบถ้วน", false,
-                            "OK", "No"
-                    ) { }
-                    Log.wtf("check null", "ทำไมใส่วะ")
+                    dialogNotification()
                 }
             }
-        } else {
+        }
+    }
+
+    private fun addProduct(product: ProductModel?) {
+        product?.let { product ->
             btnSaveUpdate.setOnClickListener {
                 if (etNameProduct.text.toString() != "" && numProductInBasket.value != 0) {
-                    product.nameProduct = etNameProduct.text.toString()
-                    product.numProduct = numProductInBasket.value
-                    product.condition = etCondition.text.toString()
-                    ViewModelProviders.of(this).get(ShopViewModel::class.java).insertProduct(this, product)
+                    setProduct(product)
+                    shopViewModel.insertProduct(this, product)
                     setResult(Activity.RESULT_OK, intent)
                     finish()
                 } else {
-                    CommonFunction.msgDialog(this, "กรอกข้อมูลไม่ครบ", "กรุณากรอกข้อมูลให้ครบถ้วน", false,
-                            "OK", "No"
-                    ) { }
-                    Log.wtf("check null", "ทำไมใส่วะ")
+                    dialogNotification()
                 }
             }
-
         }
+    }
+
+    private fun setProduct(product: ProductModel) {
+        product.let {
+            it.nameProduct = etNameProduct.text.toString()
+            it.numProduct = numProductInBasket.value
+            it.condition = etCondition.text.toString()
+        }
+    }
+
+    private fun dialogNotification() {
+        CommonFunction.msgDialog(this, "กรอกข้อมูลไม่ครบ", "กรุณากรอกข้อมูลให้ครบถ้วน", false,
+                "OK", "No"
+        ) { }
+        Log.wtf("check null", "ว่างเปล่า")
     }
 }

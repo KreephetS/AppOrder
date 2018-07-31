@@ -8,28 +8,20 @@ import android.support.v7.app.AppCompatActivity
 import com.example.patchanan.apporder.shop.view.fragment.ShopFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import android.os.Handler
+import android.widget.ImageView
+import com.dk.animation.circle.CircleAnimationUtil
 import com.example.patchanan.apporder.basket.view.fragment.BasketFragment
 import com.example.patchanan.apporder.basket.view.viewHoldel.BasketViewHoldel
 import com.example.patchanan.apporder.common.viewmodel.CommonFunction
 import com.example.patchanan.apporder.database.DBHelper
+import com.example.patchanan.apporder.history.view.fragment.HistoryFragment
 import com.example.patchanan.apporder.shop.view.viewholder.ShopViewHolder
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 
-class MainActivity : AppCompatActivity(), ShopViewHolder.productToOrder, BasketViewHoldel.productToOrder {
-
+class MainActivity : AppCompatActivity(), ShopViewHolder.productToOrder, BasketViewHoldel.productToOrder, BasketFragment.numBasket {
     private var mCount: Int = 0
-
-    override fun delNumBasket() {
-        mCount--
-        ic_basket.text = mCount.toString()
-    }
-
-    override fun addNumBasket() {
-        mCount++
-        ic_basket.text = mCount.toString()
-    }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -38,7 +30,7 @@ class MainActivity : AppCompatActivity(), ShopViewHolder.productToOrder, BasketV
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
-
+                CommonFunction.loadFragment(supportFragmentManager, HistoryFragment(), R.id.content, "shop")
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -54,7 +46,6 @@ class MainActivity : AppCompatActivity(), ShopViewHolder.productToOrder, BasketV
         relativeBasket.setOnClickListener {
             CommonFunction.loadFragment(supportFragmentManager, BasketFragment(), R.id.content, "basket")
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -66,7 +57,6 @@ class MainActivity : AppCompatActivity(), ShopViewHolder.productToOrder, BasketV
             }
         }
     }
-
 
     override fun onBackPressed() {
         val current = supportFragmentManager.findFragmentById(R.id.content)
@@ -86,5 +76,21 @@ class MainActivity : AppCompatActivity(), ShopViewHolder.productToOrder, BasketV
                     this.mCount = it.size
                     ic_basket.text = mCount.toString()
                 }, {}, {})
+    }
+
+    override fun clarNumBasket() {
+        mCount = 0
+        ic_basket.text = mCount.toString()
+    }
+
+    override fun delNumBasket() {
+        mCount--
+        ic_basket.text = mCount.toString()
+    }
+
+    override fun addNumBasket(img: ImageView) {
+        mCount++
+        ic_basket.text = mCount.toString()
+        CircleAnimationUtil().attachActivity(this).setTargetView(img).setDestView(jj).startAnimation()
     }
 }

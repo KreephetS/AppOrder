@@ -10,27 +10,25 @@ import com.example.patchanan.apporder.shop.viewModel.ShopViewModel
 import kotlinx.android.synthetic.main.item_row_product_in_basket.view.*
 import javax.security.auth.callback.Callback
 
-class BasketViewHoldel(itemView: View, val callback: (ProductModel, String) -> Unit)
+class BasketViewHoldel(itemView: View, val callbackFragment: (ProductModel, String) -> Unit)
     : RecyclerView.ViewHolder(itemView.rootView) {
     private lateinit var listener: BasketViewHoldel.productToOrder
-    fun bindItem(product: ProductModel, callback: () -> Unit) {
-        with(product) {
-            with(itemView) {
-                tvNameProductInBasket.text = nameProduct
-                numProductInBasket.value = numProduct
-                tvProductCondition.text = condition
-                btnDeleteProduct.setOnClickListener {
-                    CommonFunction.msgDialog(it.context, "ลบข้อมูล", "คุฌต้องการลบข้อมูลใช้หรือไม่", true, "ใช้", "ไม่"
-                    ) {
-                        this@BasketViewHoldel.callback(product, "del")
-                        listener.delNumBasket()
-                        callback.invoke()
-                    }
-                }
-                btnEditProduct.setOnClickListener {
-                    this@BasketViewHoldel.callback(product, "update")
-                }
+    fun bindItem(product: ProductModel, callbackAdapter: () -> Unit) {
+
+        itemView.tvNameProductInBasket.text = product.nameProduct
+        itemView.numProductInBasket.value = product.numProduct
+        itemView.tvProductCondition.text = product.condition
+        itemView.btnDeleteProduct.setOnClickListener {
+            CommonFunction.msgDialog(it.context, "ลบข้อมูล",
+                    "คุฌต้องการลบข้อมูลใช้หรือไม่", true, "ใช้", "ไม่"
+            ) {
+                listener.delNumBasket()
+                callbackAdapter.invoke()
+                callbackFragment(product, "del")
             }
+        }
+        itemView.btnEditProduct.setOnClickListener {
+            callbackFragment(product, "update")
         }
     }
 

@@ -7,11 +7,11 @@ import com.example.patchanan.apporder.R
 import com.example.patchanan.apporder.basket.view.viewHoldel.BasketViewHoldel
 import com.example.patchanan.apporder.common.model.ProductModel
 
-class BasketAdapter(private val itemProductInBasket: MutableList<ProductModel>, val callBack: (ProductModel,String) -> Unit) : RecyclerView.Adapter<BasketViewHoldel>() {
-
+class BasketAdapter(val callBack: (ProductModel, String) -> Unit) : RecyclerView.Adapter<BasketViewHoldel>() {
+    val itemProductInBasket = mutableListOf<ProductModel>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BasketViewHoldel {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_row_product_in_basket, parent, false)
-        return BasketViewHoldel(v,callBack)
+        return BasketViewHoldel(v, callBack)
 
     }
 
@@ -26,10 +26,19 @@ class BasketAdapter(private val itemProductInBasket: MutableList<ProductModel>, 
         }
     }
 
+    fun setListProductInBasket(list: MutableList<ProductModel>) {
+        itemProductInBasket.addAll(list)
+        notifyDataSetChanged()
+    }
+
     private fun removeAt(position: Int) {
         itemProductInBasket.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, itemProductInBasket.size)
+    }
+    fun clearProductList() {
+        itemProductInBasket.clear()
+        notifyDataSetChanged()
     }
 }
 

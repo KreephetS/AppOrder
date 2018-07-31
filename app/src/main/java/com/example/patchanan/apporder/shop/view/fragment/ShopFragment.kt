@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,39 +18,65 @@ import kotlinx.android.synthetic.main.fragment_home_user.*
 import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import com.example.patchanan.apporder.manager.HttpManager
+import com.example.patchanan.apporder.shop.view.activity.DetailActivity
 import com.example.patchanan.apporder.shop.viewModel.ShopViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
+const val IMAGE_URL_KEY = "url"
 
 class ShopFragment : Fragment() {
 
-    private var product: MutableList<ProductModel> = mutableListOf()
+    private lateinit var productListAdapter: ShopAdapter
+    private lateinit var shopViewModel: ShopViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_home_user, container, false)
     }
 
-    private val mContext: Context by lazy {
-        activity?.applicationContext!!
-    }
-    private val shopViewModel by lazy {
-        ViewModelProviders.of(this).get(ShopViewModel::class.java)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        shopViewModel = ViewModelProviders.of(this).get(ShopViewModel::class.java)
+        btnAddProduct.setOnClickListener {
+            val intent = Intent(context!!, AddProductActivity::class.java)
+            activity?.startActivityForResult(intent, 1)
+        }
+        initRecyclerView()
+    }
 
-        recyclerView_product.layoutManager = GridLayoutManager(activity, 1, GridLayoutManager.VERTICAL, false)
-        shopViewModel.getProductList(mContext).observe(this, Observer {
-            recyclerView_product.adapter = ShopAdapter(it) {
-                shopViewModel.insertProduct(this.activity!!, it)
+    private fun initRecyclerView() {
+        val linearGridLayoutManager = GridLayoutManager(context!!, 2, GridLayoutManager.VERTICAL, false)
+        recyclerView_product.layoutManager = linearGridLayoutManager
+
+        productListAdapter = ShopAdapter { product, action, img ->
+            when (action) {
+                "insert" -> {
+                    product.let {
+                        shopViewModel.insertProduct(context!!, product)
+                    }
+                }
+                "showDetail" -> {
+                    goToDetails(product.img!!, img)
+                }
+            }
+        }
+        recyclerView_product.adapter = productListAdapter
+        loadProductList()
+    }
+
+    private fun loadProductList() {
+        shopViewModel.getProductList(context!!).observe(this, Observer {
+            it?.let {
+                productListAdapter.setListProduct(it)
             }
         })
+    }
 
-        btnAddProduct.setOnClickListener {
-            val intent = Intent(activity, AddProductActivity::class.java)
-            activity!!.startActivityForResult(intent, 1)
-        }
-
+    fun goToDetails(url: String, imageView: View) {
+//        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this.activity!!, imageView, imageView.transitionName).toBundle()
+        Intent(context, DetailActivity::class.java)
+                .putExtra(IMAGE_URL_KEY, url)
+                .let {
+                    startActivity(it)
+                }
     }
 }

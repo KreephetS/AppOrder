@@ -2,65 +2,61 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:numberpicker="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvNameProduct"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
             android:layout_margin="5dp"
             android:text="Toppo"
             android:textSize="25sp" />
 
         <ImageView
+            android:id="@+id/imgBg"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_below="@+id/tvNameProduct"
+            android:layout_centerHorizontal="true"
+            android:background="#ffffff" />
+
+        <ImageView
             android:id="@+id/imgProduct"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:scaleType="fitXY" />
+            android:layout_below="@+id/tvNameProduct"
+            android:layout_centerHorizontal="true"
+            android:background="#fff" />
 
-        <LinearLayout
+
+        <com.travijuu.numberpicker.library.NumberPicker
+            android:id="@+id/pickerVolumeProduct"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="#dad9d9"
-            android:orientation="horizontal"
-            android:weightSum="100">
+            android:layout_below="@+id/imgBg"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            numberpicker:focusable="false"
+            numberpicker:max="10"
+            numberpicker:min="0"
+            numberpicker:unit="1"
+            numberpicker:value="-5" />
 
-            <com.travijuu.numberpicker.library.NumberPicker
-                android:id="@+id/pickerVolumeProduct"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="50"
-                android:gravity="center"
-                numberpicker:focusable="false"
-                numberpicker:max="10"
-                numberpicker:min="0"
-                numberpicker:unit="1"
-                numberpicker:value="-5" />
+        <Button
+            android:id="@+id/btnAddBasket"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pickerVolumeProduct"
+            android:background="#a6a6a6"
+            android:text="@string/addToCart"
+            android:textAllCaps="false" />
 
-            <Button
-                android:id="@+id/btnAddBasket"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="50"
-                android:background="#a6a6a6"
-                android:text="@string/addToCart"
-                android:textAllCaps="false" />
-        </LinearLayout>
-        <!--<Button-->
-        <!--android:id="@+id/btnAddBasket"-->
-        <!--android:layout_width="40dp"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:layout_gravity="end"-->
-        <!--android:layout_margin="10dp"-->
-        <!--android:background="@drawable/ic_local_grocery_store_black_24dp" />-->
-    </LinearLayout>
-
+    </RelativeLayout>
 </android.support.v7.widget.CardView>

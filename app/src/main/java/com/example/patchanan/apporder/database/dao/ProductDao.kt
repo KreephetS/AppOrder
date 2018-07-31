@@ -22,6 +22,9 @@ interface ProductDao {
     @Query("DELETE FROM `product` WHERE id = :id")
     fun deleteByProductId(id: Long)
 
+    @Query("DELETE FROM `product`")
+    fun deleteAllProduct()
+
 //    @Query("UPDATE `order` SET price = :price  WHERE id = :oId")
 //    fun updateByUserId(oId: Long, price: Int)
 }

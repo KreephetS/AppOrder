@@ -8,68 +8,95 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.example.patchanan.apporder.R
 import com.example.patchanan.apporder.database.DBHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.widget.Toast
+import android.util.Log
 import com.example.patchanan.apporder.basket.adapter.BasketAdapter
 import com.example.patchanan.apporder.basket.viewmodel.BasketViewModel
 import com.example.patchanan.apporder.common.model.OrderModel
-import com.example.patchanan.apporder.common.model.ProductModel
-import com.example.patchanan.apporder.common.viewmodel.CommonFunction
 import com.example.patchanan.apporder.shop.view.activity.AddProductActivity
 import com.example.patchanan.apporder.shop.viewModel.ShopViewModel
 import kotlinx.android.synthetic.main.fragment_basket.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class BasketFragment : Fragment() {
-    lateinit var order: OrderModel
-    var product = mutableListOf<ProductModel>()
-    private val mContext: Context by lazy {
-        activity?.applicationContext!!
-    }
+
+    private lateinit var order: OrderModel
+    private lateinit var basketAdapter: BasketAdapter
+    private val today = Date()
+    private val todayString = today.format()
+    private val basketViewModel by lazy { ViewModelProviders.of(this).get(BasketViewModel::class.java) }
+    private lateinit var listener: BasketFragment.numBasket
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_basket, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        recyclerViewProductInBasket.layoutManager = LinearLayoutManager(activity)
-        val itemDividerItemDecoration = DividerItemDecoration(activity, LinearLayoutManager.VERTICAL)
-        recyclerViewProductInBasket.addItemDecoration(itemDividerItemDecoration)
+        initInstance()
         loadItems()
-        btnSendOrder.setOnClickListener {
-            order = OrderModel("phet", product, 0, "23/07/2018", false)
-            ViewModelProviders.of(this).get(BasketViewModel::class.java).insertOrder(mContext, order)
-        }
     }
 
     private fun loadItems() {
-        DBHelper.getAppDatabase(activity!!.applicationContext!!).productDAO().getProductAll()
+        DBHelper.getAppDatabase(context!!).productDAO().getProductAll()
                 .subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe({
-                    product = it
-                    recyclerViewProductInBasket.adapter = BasketAdapter(it) { productModel, s ->
-                        when (s) {
-                            "del" -> {
+                    initRecyclerView()
+                    basketAdapter.setListProductInBasket(it)
+                }, {}, {})
+    }
 
-                                ViewModelProviders.of(activity!!)
-                                        .get(ShopViewModel::class.java)
-                                        .deleteProduct(activity!!, productModel.id) {}
+    private fun initRecyclerView() {
+        recyclerViewProductInBasket.layoutManager = LinearLayoutManager(context)
+        val itemDividerItemDecoration = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
+        recyclerViewProductInBasket.addItemDecoration(itemDividerItemDecoration)
+        basketAdapter = BasketAdapter { productModel, s ->
+            when (s) {
+                "del" -> {
 
-                            }
-                            "update" -> {
-                                val intent = Intent(activity, AddProductActivity::class.java).apply {
-                                    putExtra("itemProduct", productModel)
-                                }
-                                startActivity(intent)
-                            }
-                        }
+                    ViewModelProviders.of(activity!!)
+                            .get(ShopViewModel::class.java)
+                            .deleteProduct(context!!, productModel.id) {}
+
+                }
+                "update" -> {
+                    val intent = Intent(context, AddProductActivity::class.java).apply {
+                        putExtra("itemProduct", productModel)
+                    }
+                    startActivity(intent)
+                }
+            }
+        }
+        recyclerViewProductInBasket.adapter = basketAdapter
+    }
+
+    private fun initInstance() {
+        btnSendOrder.setOnClickListener {
+            sendOrder()
+            listener.clarNumBasket()
+            basketAdapter.clearProductList()
+            basketViewModel.clerProdct(context!!)
+        }
+    }
+
+    private fun sendOrder() {
+        DBHelper.getAppDatabase(context!!).productDAO().getProductAll()
+                .subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe({
+                    it?.let {
+                        order = OrderModel("phet", it, 0, todayString, false)
+                        Log.wtf("Order Model", order.orderBy)
+                        basketViewModel.insertOrder(context!!, order)
+                    }.run {
+
                     }
                 }, {}, {})
     }
@@ -79,4 +106,20 @@ class BasketFragment : Fragment() {
         loadItems()
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is BasketFragment.numBasket) {
+            listener = context
+        }
+    }
+
+    private fun Date.format(): String {
+        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+        return sdf.format(this)
+    }
+
+
+    interface numBasket {
+        fun clarNumBasket()
+    }
 }
